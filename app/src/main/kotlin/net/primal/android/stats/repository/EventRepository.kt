@@ -52,6 +52,7 @@ class EventRepository @Inject constructor(
         eventId: String,
         eventAuthorId: String,
         optionalTags: List<JsonArray> = emptyList(),
+        unlike: Boolean = false,
     ) = withContext(dispatcherProvider.io()) {
         val statsUpdater = EventStatsUpdater(
             eventId = eventId,
@@ -61,14 +62,18 @@ class EventRepository @Inject constructor(
         )
 
         try {
-            statsUpdater.increaseLikeStats()
+            if (unlike) {
+                statsUpdater.decreaseLikeStats()
+            } else {
+                statsUpdater.increaseLikeStats()
+            }
             nostrPublisher.signPublishImportNostrEvent(
                 userId = userId,
                 unsignedNostrEvent = NostrUnsignedEvent(
                     pubKey = userId,
                     kind = NostrEventKind.Reaction.value,
                     tags = listOf(eventId.asEventIdTag(), eventAuthorId.asPubkeyTag()) + optionalTags,
-                    content = "+",
+                    content = if(unlike) "-" else "+",
                 ),
             )
         } catch (error: NostrPublishException) {

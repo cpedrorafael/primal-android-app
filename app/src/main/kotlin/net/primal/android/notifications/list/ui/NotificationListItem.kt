@@ -61,6 +61,7 @@ fun NotificationListItem(
     noteCallbacks: NoteCallbacks,
     onReplyClick: ((String) -> Unit)? = null,
     onPostLikeClick: ((FeedPostUi) -> Unit)? = null,
+    onPostUnlikeClick: ((FeedPostUi) -> Unit)? = null,
     onRepostClick: ((FeedPostUi) -> Unit)? = null,
     onBookmarkClick: ((FeedPostUi) -> Unit)? = null,
     onDefaultZapClick: ((FeedPostUi) -> Unit)? = null,
@@ -105,6 +106,7 @@ fun NotificationListItem(
                     FeedPostAction.Reply -> if (onReplyClick != null) onReplyClick(postData.postId)
                     FeedPostAction.Zap -> onDefaultZapClick?.invoke(postData)
                     FeedPostAction.Like -> onPostLikeClick?.invoke(postData)
+                    FeedPostAction.Unlike -> onPostUnlikeClick?.invoke(postData)
                     FeedPostAction.Repost -> onRepostClick?.invoke(postData)
                     FeedPostAction.Bookmark -> onBookmarkClick?.invoke(postData)
                 }

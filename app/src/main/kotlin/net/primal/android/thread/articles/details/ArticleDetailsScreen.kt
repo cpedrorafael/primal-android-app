@@ -360,6 +360,8 @@ private fun ArticleDetailsScreen(
 
                             FeedPostAction.Like -> detailsEventPublisher(UiEvent.LikeArticle)
 
+                            FeedPostAction.Unlike -> detailsEventPublisher(UiEvent.UnlikeArticle)
+
                             FeedPostAction.Repost -> {
                                 showRepostOrQuoteConfirmation = true
                             }

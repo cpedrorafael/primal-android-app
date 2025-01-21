@@ -101,6 +101,7 @@ class ArticleDetailsViewModel @Inject constructor(
                     UiEvent.DismissErrors -> dismissErrors()
                     is UiEvent.ZapArticle -> zapArticle(zapAction = it)
                     UiEvent.LikeArticle -> likeArticle()
+                    UiEvent.UnlikeArticle -> likeArticle()
                     UiEvent.RepostAction -> repostPost()
                     UiEvent.ToggleAuthorFollows -> followUnfollowAuthor()
                     UiEvent.ToggleHighlights -> toggleHighlightsVisibility()
@@ -258,7 +259,7 @@ class ArticleDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun likeArticle() =
+    private fun likeArticle(unlike: Boolean = false) =
         viewModelScope.launch {
             val article = _state.value.article
             if (article != null) {
@@ -271,6 +272,7 @@ class ArticleDetailsViewModel @Inject constructor(
                             "${NostrEventKind.LongFormContent.value}:${article.authorId}:${article.articleId}"
                                 .asReplaceableEventTag(),
                         ),
+                        unlike = unlike
                     )
                 } catch (error: NostrPublishException) {
                     Timber.w(error)

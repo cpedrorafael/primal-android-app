@@ -19,6 +19,11 @@ interface NoteContract {
             val postAuthorId: String,
         ) : UiEvent()
 
+        data class PostUnlikeAction(
+            val postId: String,
+            val postAuthorId: String,
+        ) : UiEvent()
+
         data class RepostAction(
             val postId: String,
             val postAuthorId: String,

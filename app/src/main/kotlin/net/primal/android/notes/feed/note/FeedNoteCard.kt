@@ -351,6 +351,15 @@ private fun FeedNoteCard(
                                 )
                             }
 
+                            FeedPostAction.Unlike -> {
+                                eventPublisher(
+                                    UiEvent.PostUnlikeAction(
+                                        postId = data.postId,
+                                        postAuthorId = data.authorId,
+                                    ),
+                                )
+                            }
+
                             FeedPostAction.Repost -> {
                                 showRepostOrQuoteConfirmation = true
                             }

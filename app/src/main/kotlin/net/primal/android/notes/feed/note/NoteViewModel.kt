@@ -73,6 +73,7 @@ class NoteViewModel @Inject constructor(
             events.collect {
                 when (it) {
                     is UiEvent.PostLikeAction -> likePost(it)
+                    is UiEvent.PostUnlikeAction-> unlikePost(it)
                     is UiEvent.ReportAbuse -> reportAbuse(it)
                     is UiEvent.RepostAction -> repostPost(it)
                     is UiEvent.ZapAction -> zapPost(it)
@@ -91,6 +92,24 @@ class NoteViewModel @Inject constructor(
                     userId = activeAccountStore.activeUserId(),
                     eventId = postLikeAction.postId,
                     eventAuthorId = postLikeAction.postAuthorId,
+                )
+            } catch (error: NostrPublishException) {
+                Timber.w(error)
+                setState { copy(error = UiError.FailedToPublishLikeEvent(error)) }
+            } catch (error: MissingRelaysException) {
+                Timber.w(error)
+                setState { copy(error = UiError.MissingRelaysConfiguration(error)) }
+            }
+        }
+
+    private fun unlikePost(postUnlikeAction: UiEvent.PostUnlikeAction) =
+        viewModelScope.launch {
+            try {
+                eventRepository.likeEvent(
+                    userId = activeAccountStore.activeUserId(),
+                    eventId = postUnlikeAction.postId,
+                    eventAuthorId = postUnlikeAction.postAuthorId,
+                    unlike = true
                 )
             } catch (error: NostrPublishException) {
                 Timber.w(error)

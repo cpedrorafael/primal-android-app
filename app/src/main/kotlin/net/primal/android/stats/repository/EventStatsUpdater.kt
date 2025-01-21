@@ -33,6 +33,12 @@ class EventStatsUpdater(
             database.eventUserStats().upsert(data = eventUserStats.copy(liked = true))
         }
 
+    suspend fun decreaseLikeStats() =
+        database.withTransaction {
+            database.eventStats().upsert(data = eventStats.copy(likes = (eventStats.likes - 1).coerceAtLeast(0)))
+            database.eventUserStats().upsert(data = eventUserStats.copy(liked = false))
+        }
+
     suspend fun increaseRepostStats() =
         database.withTransaction {
             database.eventStats().upsert(data = eventStats.copy(reposts = eventStats.reposts + 1))

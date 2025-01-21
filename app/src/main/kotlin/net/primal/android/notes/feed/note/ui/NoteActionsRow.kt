@@ -90,8 +90,8 @@ fun FeedNoteActionsRow(
             iconVector = PrimalIcons.FeedNewLike,
             iconVectorHighlight = PrimalIcons.FeedNewLikeFilled,
             colorHighlight = AppTheme.extraColorScheme.liked,
-            onClick = if (!eventStats.userLiked && onPostAction != null) {
-                { onPostAction(FeedPostAction.Like) }
+            onClick = if (onPostAction != null) {
+                { onPostAction(if (eventStats.userLiked) FeedPostAction.Unlike else FeedPostAction.Like) }
             } else {
                 null
             },
